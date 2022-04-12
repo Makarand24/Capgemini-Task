@@ -1,0 +1,175 @@
+﻿using System;
+using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace ConsoleApp1
+{
+    public class student
+    {
+        public string firstname { get; set; }
+        public string lastname { get; set; }
+        public string smailid { get; set; }
+        public string branch { get; set; }
+        public double per { get; set; }
+
+        public List<string> skills { get; set; }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<student> s = new List<student>()
+            {
+                new student(){firstname="makarand",lastname="purohit",smailid="makgmail.com",branch="IT",per=90, skills=new List<string>{"C#.NET","SQL" }},
+                new student(){firstname="om",lastname="Joshi",smailid="omgmail.com",branch="CS",per=76, skills=new List<string>{"PHP","MYSQL" }},
+                new student(){firstname="jay",lastname="Choudhary",smailid="jgmail.com",branch="EnTC",per=43, skills=new List<string>{"JAVA","ORACLE" }},
+                new student(){firstname="ram",lastname="Verma",smailid="rgmail.com",branch="EnTC",per=81, skills=new List<string>{"PHP","MYSQL" }},
+                new student(){firstname="pranav",lastname="Gadhave",smailid="prgmail.com",branch="CS",per=55, skills=new List<string>{"C#.NET","SQL" }}
+            };
+
+            //1
+            var q = from i in s select i;
+            foreach(var i in q)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            var q1 = from j in s where j.per>60 select j;
+            foreach (var j in q1)
+            {
+                Console.WriteLine(j.firstname + "," + j.lastname + "," + j.smailid + "," + j.branch + "," + j.per);
+            }
+
+            IEnumerable<student> q2 = (from a in s select a).Take(3);
+            foreach (var a in q2)
+            {
+                Console.WriteLine(a.firstname + "," + a.lastname + "," + a.smailid + "," + a.branch + "," + a.per);
+            }
+
+            IEnumerable<student> q3 = s.TakeWhile(i => i.firstname == "om");
+            foreach (var b in q3)
+            {
+                Console.WriteLine(b.firstname + "," + b.lastname + "," + b.smailid + "," + b.branch + "," + b.per);
+            }
+
+            var q4 = (from c in s select c).Skip(2);
+            foreach (var c in q4)
+            {
+                Console.WriteLine(c.firstname + "," + c.lastname + "," + c.smailid + "," + c.branch + "," + c.per);
+            }
+
+            var q5 = s.SkipWhile(i => i.firstname=="om");
+            foreach (var d in q5)
+            {
+                Console.WriteLine(d.firstname + "," + d.lastname + "," + d.smailid + "," + d.branch + "," + d.per);
+            }
+
+            //2
+            var q6 = from e in s orderby e.per select e;
+            foreach (var e in q6)
+            {
+                Console.WriteLine(e.firstname + "," + e.lastname + "," + e.smailid + "," + e.branch + "," + e.per);
+            }
+
+            var q7 = s.OrderByDescending(i=>i.per>50);
+            foreach (var f in q7)
+            {
+                Console.WriteLine(f.firstname + "," + f.lastname + "," + f.smailid + "," + f.branch + "," + f.per);
+            }
+
+            var q8 = from i in s group i by i.branch;
+            foreach (var group in q8)
+            {
+                Console.WriteLine(group.Key);
+                foreach (var i in group)
+                {
+                    Console.WriteLine(i.firstname + " " + i.lastname);
+                }
+            }
+
+            //3
+            var q9 = s.SelectMany(h => h.skills);
+            foreach (var h in q9)
+            {
+                Console.WriteLine(h);
+            }
+
+            //4
+            double sum = (from i in s select i.per).Sum();
+            Console.WriteLine("Total sum of percentage is:" + sum);
+
+            double max = (from i in s select i.per).Max();
+            Console.WriteLine("Maximum percentage is:" + max);
+
+            double min = (from i in s select i.per).Min();
+            Console.WriteLine("Minimum percentage is:" + min);
+
+            double avg = (from i in s select i.per).Average();
+            Console.WriteLine("Total average of percentage is:" + avg);
+
+            var q10 = (from i in s select i.branch).Distinct();
+            foreach (string i in q10)
+            {
+                Console.WriteLine(i);
+            }
+
+            //5
+            var q11 = from i in s let r = i.per + 10 where r > 60 select r;
+            foreach (var i in q11)
+            {
+                Console.WriteLine(i);
+            }
+
+            var q12 = (from i in s select i).OfType<double>();
+            foreach (var i in q12)
+            {
+                Console.WriteLine(i);
+            }
+
+            var q13 = from i in s where i.branch == "CS" select i into res where res.per > 50 select res;
+            foreach (var i in q13)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            //9
+            IEnumerable<student> q14 = (from i in s select i).AsQueryable();
+            foreach (var i in q14)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            IEnumerable<student> q15 = (from i in s select i).AsEnumerable();
+            foreach (var i in q15)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            //8
+            var q16 = from i in s where i.firstname.StartsWith("m") select i;
+            foreach (var i in q16)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            var q17 = from i in s where i.firstname.EndsWith("t") select i;
+            foreach (var i in q17)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            var q18 = from i in s where i.firstname.Contains("a") select i;
+            foreach (var i in q18)
+            {
+                Console.WriteLine(i.firstname + "," + i.lastname + "," + i.smailid + "," + i.branch + "," + i.per);
+            }
+
+            //7
+            var q19 = (from i in s select i).Count();
+            Console.WriteLine(q19);
+
+
+        }
+    }
+}
